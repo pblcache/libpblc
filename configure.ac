@@ -1,7 +1,7 @@
 
 AC_PREREQ(2.57)
 
-AC_INIT([pblc], [1.0], [lpabon@redhat.com])
+AC_INIT([pblc], [0.1], [lpabon@redhat.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_GNU_SOURCE
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
