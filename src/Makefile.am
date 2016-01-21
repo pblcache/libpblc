@@ -1,8 +1,10 @@
-libpblc_la_SOURCES = pblc.c
 lib_LTLIBRARIES = libpblc.la
+libpblc_la_SOURCES = pblc.c
 
-pblcincludedir = $(includdir)/pblc
+pblcincludedir = $(includedir)/pblc
 pblcinclude_HEADERS = pblc.h
+
+AM_CFLAGS = -Wall -Werror
 
 #### UNIT TESTS #####
 CLEANFILES = *.gcda *.gcno *_xunit.xml
