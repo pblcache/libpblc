@@ -26,6 +26,9 @@ AC_SUBST(LIBTOOL_DEPS)
 # Check whether some low-level functions/files are available
 AC_HEADER_STDC
 
+# Check libraries
+PKG_CHECK_MODULES([UNITTEST], [cmockery2], , AC_MSG_ERROR([cmockery2 library is required to build]))
+
 # If pkg-config
 AC_CHECK_PROG(PKG_CONFIG, pkg-config, yes)
 AM_CONDITIONAL([HAVE_PKG_CONFIG], [test "x$PKG_CONFIG" != "x"])

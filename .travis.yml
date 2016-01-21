@@ -1,0 +1,8 @@
+language: c
+sudo: true
+compiler:
+    - gcc
+before_install:
+    - bash .travis_cmockery2.sh
+script:
+    - ./autogen.sh && ./configure && make check
