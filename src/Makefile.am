@@ -1,5 +1,7 @@
 lib_LTLIBRARIES = libpblc.la
 libpblc_la_SOURCES = pblc.c
+libpblc_la_LDFLAGS = $(MSGPACK_LIBS)
+libpblc_la_CFLAGS = $(MSGPACK_CFLAGS)
 
 pblcincludedir = $(includedir)/pblc
 pblcinclude_HEADERS = pblc.h
