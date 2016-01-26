@@ -29,7 +29,7 @@ AC_HEADER_STDC
 # Check libraries
 PKG_CHECK_MODULES([UNITTEST], [cmockery2], , AC_MSG_ERROR([cmockery2 library is required to build]))
 PKG_CHECK_MODULES([MSGPACK], [msgpack], , 
-                  [AC_CHECK_LIB([z], [msgpack], 
+                  [AC_CHECK_LIB([msgpack], [msgpack_version], 
                                 [MSGPACK_LIBS="-lmsgpack"], 
                                 AC_MSG_ERROR([msgpack library is required to build]))])
 

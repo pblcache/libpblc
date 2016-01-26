@@ -3,6 +3,8 @@ sudo: true
 compiler:
     - gcc
 before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get -y install libmsgpack-dev pkg-config
     - bash .travis_cmockery2.sh
 script:
     - ./autogen.sh && ./configure && make check
