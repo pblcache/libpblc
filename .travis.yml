@@ -3,6 +3,6 @@ sudo: true
 compiler:
     - gcc
 before_install:
-    - bash .travis_cmockery2.sh
+    - bash .travis_deps.sh
 script:
     - ./autogen.sh && ./configure && make check
