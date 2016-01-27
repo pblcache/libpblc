@@ -84,7 +84,6 @@ msg_header_unmarshal(msg_t *m,
     return 0;
 }
 
-
 msgpack_sbuffer *
 msg_put_marshal(const msg_t *m) {
     REQUIRE(m != NULL);

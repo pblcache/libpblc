@@ -18,17 +18,44 @@
 #include <stddef.h>
 #include <setjmp.h>
 #include <inttypes.h>
+#include <msgpack.h>
+
+#include "msg.h"
 #include <cmockery/cmockery.h>
 
-// A test case that does nothing and succeeds.
-static void null_test_success(void **state) {
+static void
+test_code_decode(void **state) {
     (void) state;
+
+    msg_t orig_msg, decoded_msg;
+    msgpack_sbuffer *sbuf;
+    int ret;
+
+    orig_msg.header.magic = 0xFF;
+    orig_msg.header.version = 0xA5;
+    orig_msg.header.type = PBLC_MSG_GET;
+    orig_msg.block = 0xAABBCCDD;
+    orig_msg.nblocks = 0xFFDDEE;
+    orig_msg.path = "this/is/a/test";
+
+    sbuf = msg_put_marshal(&orig_msg);
+    assert_non_null(sbuf);
+    assert_non_null(sbuf->data);
+    assert_true(sbuf->size > 0);
+
+    ret = msg_put_unmarshal(&decoded_msg,
+            sbuf->data, sbuf->size);
+    msgpack_sbuffer_free(sbuf);
+    assert_int_equal(ret, 0);
+    assert_int_equal(orig_msg.header.magic,
+            decoded_msg.header.magic);
+
 }
 
 int main(void) {
     const UnitTest tests[] = {
-        unit_test(null_test_success),
+        unit_test(test_code_decode),
     };
 
-    return run_tests(tests, "pblc_test");
+    return run_tests(tests, "msg_test");
 }

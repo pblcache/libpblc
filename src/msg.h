@@ -40,5 +40,33 @@ typedef struct {
     char *path;
 } msg_t;
     
+int
+msg_header_marshal(msgpack_packer *pk, const msg_t *m);
+int
+msg_header_unmarshal(msg_t *m,
+        msgpack_unpacked *upk, 
+        const char* data,
+        size_t len,
+        size_t* off);
+msgpack_sbuffer *
+msg_put_marshal(const msg_t *m);
+int
+msg_unpack_next_u64(uint64_t *value,
+        msgpack_unpacked *upk,
+        const char *data,
+        size_t len,
+        size_t *off);
+int
+msg_unpack_next_u32(uint32_t *value,
+        msgpack_unpacked *upk,
+        const char *data,
+        size_t len,
+        size_t *off);
+int
+msg_put_unmarshal(msg_t *m,
+        const char *data,
+        size_t len);
+msgpack_sbuffer *
+msg_get_marshal(const msg_t *m);
 
 #endif /* LIBPBLC_MSG_H_ */
