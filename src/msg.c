@@ -22,6 +22,8 @@
 
 #ifdef UNIT_TESTING
 #include <cmockery/cmockery_override.h>
+#define strndup test_strndup
+char * test_strndup(const char *s, size_t n);
 #endif
 
 int
@@ -179,6 +181,8 @@ msg_put_unmarshal(msg_t *m,
     msgpack_unpack_return ret;
     msgpack_unpacked upk;
 
+    msgpack_unpacked_init(&upk);
+
     if (0 > msg_header_unmarshal(m, &upk, data, len, &offset)) {
         return -1;
     }
@@ -200,6 +204,9 @@ msg_put_unmarshal(msg_t *m,
         return -1;
     }
     m->path = strndup(upk.data.via.str.ptr, upk.data.via.str.size);
+    if (m->path == NULL) {
+        return -1;
+    }
 
     return 0;
 }
@@ -208,3 +215,11 @@ msgpack_sbuffer *
 msg_get_marshal(const msg_t *m) {
     return msg_put_marshal(m);
 }
+
+void
+msg_destroy(msg_t *m) {
+    if (m->path != NULL) {
+        free(m->path);
+    }
+}
+

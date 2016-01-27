@@ -23,6 +23,18 @@
 #include "msg.h"
 #include <cmockery/cmockery.h>
 
+char *
+test_strndup(const char *s,
+        size_t n) {
+    char *ns;
+
+    ns = (char *)test_malloc(n+1);
+    assert_non_null(ns);
+    memcpy(ns, s, n);
+    ns[n] = '\0';
+    return ns;
+}
+
 static void
 test_code_decode(void **state) {
     (void) state;
@@ -46,9 +58,20 @@ test_code_decode(void **state) {
     ret = msg_put_unmarshal(&decoded_msg,
             sbuf->data, sbuf->size);
     msgpack_sbuffer_free(sbuf);
+
     assert_int_equal(ret, 0);
     assert_int_equal(orig_msg.header.magic,
             decoded_msg.header.magic);
+    assert_int_equal(orig_msg.header.version,
+            decoded_msg.header.version);
+    assert_int_equal(orig_msg.header.type,
+            decoded_msg.header.type);
+    assert_int_equal(orig_msg.block, decoded_msg.block);
+    assert_int_equal(orig_msg.nblocks, decoded_msg.nblocks);
+    assert_string_equal(orig_msg.path, decoded_msg.path);
+    assert_ptr_not_equal(orig_msg.path, decoded_msg.path);
+
+    msg_destroy(&decoded_msg);
 
 }
 

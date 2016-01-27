@@ -66,7 +66,7 @@ int
 msg_put_unmarshal(msg_t *m,
         const char *data,
         size_t len);
-msgpack_sbuffer *
-msg_get_marshal(const msg_t *m);
+msgpack_sbuffer *msg_get_marshal(const msg_t *m);
+void msg_destroy(msg_t *m);
 
 #endif /* LIBPBLC_MSG_H_ */
