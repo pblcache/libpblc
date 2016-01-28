@@ -22,6 +22,9 @@
 
 #ifdef UNIT_TESTING
 #include <cmockery/cmockery_override.h>
+#ifdef strndup
+#undef strndup
+#endif
 #define strndup test_strndup
 char * test_strndup(const char *s, size_t n);
 #endif
