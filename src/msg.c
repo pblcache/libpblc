@@ -19,14 +19,10 @@
 #include <cmockery/pbc.h>
 
 #include "msg.h"
+#include "msg_utils.h"
 
 #ifdef UNIT_TESTING
 #include <cmockery/cmockery_override.h>
-#ifdef strndup
-#undef strndup
-#endif
-#define strndup test_strndup
-char * test_strndup(const char *s, size_t n);
 #endif
 
 int
@@ -123,55 +119,6 @@ msg_put_marshal(const msg_t *m) {
 }
 
 int
-msg_unpack_next_u64(uint64_t *value,
-        msgpack_unpacked *upk,
-        const char *data,
-        size_t len,
-        size_t *off) {
-
-    REQUIRE(value != NULL);
-    REQUIRE(upk != NULL);
-    REQUIRE(data != NULL);
-    REQUIRE(len > 0);
-
-    msgpack_unpack_return ret;
-
-    ret = msgpack_unpack_next(upk, data, len, off);
-    if (ret != MSGPACK_UNPACK_SUCCESS) {
-        return -1;
-    }
-    if (MSGPACK_OBJECT_POSITIVE_INTEGER != upk->data.type) {
-        return -1;
-    }
-    *value = upk->data.via.u64;
-
-    ENSURE(*value == upk->data.via.u64);
-
-    return 0;
-}
-
-int
-msg_unpack_next_u32(uint32_t *value,
-        msgpack_unpacked *upk,
-        const char *data,
-        size_t len,
-        size_t *off) {
-
-    uint64_t value64;
-    int ret;
-
-    ret = msg_unpack_next_u64(&value64, upk, data, len, off);
-    if (0 > ret) {
-        return ret;
-    }
-    *value = (uint32_t)value64;
-
-    ENSURE(*value == (uint32_t)value64);
-
-    return 0;
-}
-
-int
 msg_put_unmarshal(msg_t *m,
         const char *data,
         size_t len) {
@@ -181,7 +128,6 @@ msg_put_unmarshal(msg_t *m,
 
     int retval;
     size_t offset = 0;
-    msgpack_unpack_return ret;
     msgpack_unpacked upk;
 
     msgpack_unpacked_init(&upk);
@@ -198,17 +144,9 @@ msg_put_unmarshal(msg_t *m,
     if (0 > retval) {
         return retval;
     }
-
-    ret = msgpack_unpack_next(&upk, data, len, &offset);
-    if (ret != MSGPACK_UNPACK_SUCCESS) {
-        return -1;
-    }
-    if (MSGPACK_OBJECT_STR != upk.data.type) {
-        return -1;
-    }
-    m->path = strndup(upk.data.via.str.ptr, upk.data.via.str.size);
-    if (m->path == NULL) {
-        return -1;
+    retval = msg_unpack_next_string(&m->path, &upk, data, len, &offset);
+    if (0 > retval) {
+        return retval;
     }
 
     return 0;

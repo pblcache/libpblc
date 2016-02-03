@@ -1,5 +1,7 @@
 lib_LTLIBRARIES = libpblc.la
-libpblc_la_SOURCES = pblc.c msg.c
+libpblc_la_SOURCES = pblc.c \
+					 msg.c \
+					 msg_utils.c
 libpblc_la_LDFLAGS = $(MSGPACK_LIBS)
 libpblc_la_CFLAGS = $(MSGPACK_CFLAGS)
 
@@ -22,7 +24,7 @@ TESTS += pblc_test
 # msg tests
 msg_test_CFLAGS = $(UNITTEST_CFLAGS) $(MSGPACK_CFLAGS)
 msg_test_LDFLAGS = $(UNITTEST_LIBS) $(MSGPACK_LIBS)
-msg_test_SOURCES = msg_test.c msg.c
+msg_test_SOURCES = msg_test.c msg.c msg_utils.c
 TESTS += msg_test
 
 # --- End UNIT TEST
