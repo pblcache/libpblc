@@ -1,0 +1,42 @@
+ar-lib
+aclocal.m4
+autom4te.cache
+build
+config.*
+configure
+cscope.*
+depcomp
+install-sh
+ltmain.sh
+Makefile
+Makefile.in
+missing
+stamp-h1
+test-driver
+*compile
+*.gcda
+*.gcno
+*.sw?
+*.swp
+*~
+*.lo
+*.la
+*.o
+*.tar.gz
+*.rpm
+*.diff
+*.patch
+.libs
+.deps
+
+# Softlinks to test and log
+log
+*.vol
+
+# cmockery2 unit tests
+*.log
+*.trs
+*_unittest
+
+# generated
+pblc.pc
